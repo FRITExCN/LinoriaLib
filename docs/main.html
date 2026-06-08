@@ -1,0 +1,1358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>UI Library — Documentation</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&family=Syne:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0c0c0f;
+    --bg2: #111116;
+    --bg3: #16161d;
+    --surface: #1a1a24;
+    --surface2: #202030;
+    --border: #2a2a3a;
+    --border2: #333348;
+    --accent: #ff3c3c;
+    --accent2: #ff6b6b;
+    --accent-glow: rgba(255,60,60,0.15);
+    --text: #e8e8f0;
+    --text2: #9898b0;
+    --text3: #5a5a72;
+    --green: #3cffa0;
+    --blue: #3ca8ff;
+    --yellow: #ffd23c;
+    --purple: #b03cff;
+    --sidebar-w: 280px;
+    --header-h: 64px;
+    --font-mono: 'JetBrains Mono', monospace;
+    --font-display: 'Syne', sans-serif;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: var(--font-display);
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  /* ── SCROLLBAR ── */
+  ::-webkit-scrollbar { width: 4px; height: 4px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 4px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--accent); }
+
+  /* ── HEADER ── */
+  header {
+    position: fixed; top: 0; left: 0; right: 0;
+    height: var(--header-h);
+    background: rgba(12,12,15,0.92);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 32px;
+    z-index: 100;
+  }
+
+  .header-logo {
+    display: flex; align-items: center; gap: 12px;
+    font-family: var(--font-display);
+    font-size: 18px; font-weight: 800;
+    letter-spacing: -0.5px;
+    text-decoration: none; color: var(--text);
+  }
+
+  .logo-mark {
+    width: 32px; height: 32px;
+    background: var(--accent);
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px; font-weight: 800;
+    color: #fff;
+    box-shadow: 0 0 20px var(--accent-glow);
+    flex-shrink: 0;
+  }
+
+  .header-tag {
+    font-family: var(--font-mono);
+    font-size: 11px; font-weight: 400;
+    color: var(--accent);
+    background: rgba(255,60,60,0.08);
+    border: 1px solid rgba(255,60,60,0.2);
+    padding: 2px 8px; border-radius: 4px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+
+  .header-right {
+    display: flex; align-items: center; gap: 20px;
+  }
+
+  .header-right a {
+    font-family: var(--font-mono);
+    font-size: 12px; color: var(--text2);
+    text-decoration: none;
+    transition: color .2s;
+  }
+  .header-right a:hover { color: var(--text); }
+
+  /* ── LAYOUT ── */
+  .layout {
+    display: flex;
+    padding-top: var(--header-h);
+    min-height: 100vh;
+  }
+
+  /* ── SIDEBAR ── */
+  aside {
+    width: var(--sidebar-w);
+    min-height: calc(100vh - var(--header-h));
+    background: var(--bg2);
+    border-right: 1px solid var(--border);
+    position: sticky;
+    top: var(--header-h);
+    height: calc(100vh - var(--header-h));
+    overflow-y: auto;
+    flex-shrink: 0;
+    padding: 24px 0;
+  }
+
+  .nav-section {
+    margin-bottom: 24px;
+  }
+
+  .nav-section-title {
+    font-family: var(--font-mono);
+    font-size: 10px; font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--text3);
+    padding: 0 20px 8px;
+  }
+
+  .nav-item {
+    display: block;
+    padding: 7px 20px;
+    font-family: var(--font-display);
+    font-size: 13.5px; font-weight: 500;
+    color: var(--text2);
+    text-decoration: none;
+    border-left: 2px solid transparent;
+    transition: all .15s;
+    cursor: pointer;
+  }
+
+  .nav-item:hover {
+    color: var(--text);
+    background: rgba(255,255,255,0.03);
+    border-left-color: var(--border2);
+  }
+
+  .nav-item.active {
+    color: var(--accent);
+    background: rgba(255,60,60,0.06);
+    border-left-color: var(--accent);
+  }
+
+  .nav-item .nav-badge {
+    float: right;
+    font-family: var(--font-mono);
+    font-size: 9px;
+    background: var(--surface2);
+    color: var(--text3);
+    padding: 1px 5px;
+    border-radius: 3px;
+    margin-top: 2px;
+  }
+
+  /* ── MAIN CONTENT ── */
+  main {
+    flex: 1;
+    padding: 48px 64px 96px;
+    max-width: 900px;
+    overflow-x: hidden;
+  }
+
+  /* ── SECTIONS ── */
+  section {
+    margin-bottom: 80px;
+    scroll-margin-top: calc(var(--header-h) + 24px);
+  }
+
+  .section-label {
+    font-family: var(--font-mono);
+    font-size: 10px; font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 8px;
+  }
+
+  h1 {
+    font-family: var(--font-display);
+    font-size: 42px; font-weight: 800;
+    letter-spacing: -1.5px;
+    line-height: 1.1;
+    color: var(--text);
+    margin-bottom: 16px;
+  }
+
+  h2 {
+    font-family: var(--font-display);
+    font-size: 26px; font-weight: 700;
+    letter-spacing: -0.5px;
+    color: var(--text);
+    margin-bottom: 12px;
+    margin-top: 56px;
+    display: flex; align-items: center; gap: 10px;
+  }
+
+  h2:first-of-type { margin-top: 0; }
+
+  h2 .h2-icon {
+    width: 28px; height: 28px;
+    background: var(--surface2);
+    border: 1px solid var(--border2);
+    border-radius: 6px;
+    display: inline-flex; align-items: center; justify-content: center;
+    font-size: 14px;
+    flex-shrink: 0;
+  }
+
+  h3 {
+    font-family: var(--font-mono);
+    font-size: 14px; font-weight: 600;
+    color: var(--text);
+    margin-bottom: 8px;
+    margin-top: 32px;
+  }
+
+  p {
+    color: var(--text2);
+    font-size: 15px;
+    font-weight: 400;
+    margin-bottom: 16px;
+    line-height: 1.75;
+  }
+
+  /* ── HERO ── */
+  .hero-desc {
+    font-size: 17px;
+    color: var(--text2);
+    max-width: 580px;
+    margin-bottom: 32px;
+  }
+
+  .hero-badges {
+    display: flex; gap: 8px; flex-wrap: wrap;
+    margin-bottom: 40px;
+  }
+
+  .badge {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    padding: 4px 10px;
+    border-radius: 5px;
+    border: 1px solid;
+  }
+
+  .badge-red { color: var(--accent); background: rgba(255,60,60,0.08); border-color: rgba(255,60,60,0.2); }
+  .badge-green { color: var(--green); background: rgba(60,255,160,0.06); border-color: rgba(60,255,160,0.2); }
+  .badge-blue { color: var(--blue); background: rgba(60,168,255,0.06); border-color: rgba(60,168,255,0.2); }
+  .badge-yellow { color: var(--yellow); background: rgba(255,210,60,0.06); border-color: rgba(255,210,60,0.2); }
+
+  /* ── CODE BLOCKS ── */
+  .code-block {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+    margin: 20px 0;
+    font-family: var(--font-mono);
+    font-size: 13px;
+  }
+
+  .code-header {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 9px 16px;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+
+  .code-lang {
+    font-size: 11px; font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--text3);
+  }
+
+  .code-dots {
+    display: flex; gap: 5px;
+  }
+
+  .code-dot {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+  }
+  .dot-r { background: #ff5f57; }
+  .dot-y { background: #ffbd2e; }
+  .dot-g { background: #28c840; }
+
+  pre {
+    padding: 20px;
+    overflow-x: auto;
+    line-height: 1.6;
+  }
+
+  code {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    color: var(--text);
+  }
+
+  /* Syntax highlights */
+  .kw { color: #ff6b9d; }
+  .fn { color: #a0d4ff; }
+  .str { color: #a8d8a8; }
+  .num { color: #ffd93d; }
+  .cmt { color: var(--text3); font-style: italic; }
+  .var { color: #ffb347; }
+  .punct { color: var(--text2); }
+
+  /* Inline code */
+  p code, li code, td code {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 12px;
+    color: var(--accent2);
+  }
+
+  /* ── PARAM TABLE ── */
+  .param-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 16px 0;
+    font-size: 13.5px;
+  }
+
+  .param-table thead tr {
+    background: var(--surface);
+    border-bottom: 2px solid var(--border2);
+  }
+
+  .param-table th {
+    font-family: var(--font-mono);
+    font-size: 10px; font-weight: 600;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--text3);
+    padding: 10px 14px;
+    text-align: left;
+  }
+
+  .param-table td {
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--border);
+    color: var(--text2);
+    vertical-align: top;
+    line-height: 1.5;
+  }
+
+  .param-table tbody tr:hover td {
+    background: rgba(255,255,255,0.02);
+  }
+
+  .param-table td:first-child {
+    font-family: var(--font-mono);
+    font-size: 12.5px;
+    color: var(--blue);
+    white-space: nowrap;
+  }
+
+  .param-table td:nth-child(2) {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--purple);
+  }
+
+  .req-tag {
+    font-family: var(--font-mono);
+    font-size: 9px; font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 1px 5px;
+    border-radius: 3px;
+    vertical-align: middle;
+    margin-left: 4px;
+  }
+
+  .req { background: rgba(255,60,60,0.15); color: var(--accent); border: 1px solid rgba(255,60,60,0.3); }
+  .opt { background: rgba(60,255,160,0.08); color: var(--green); border: 1px solid rgba(60,255,160,0.2); }
+
+  /* ── CALLOUT BOXES ── */
+  .callout {
+    border-radius: 8px;
+    padding: 14px 18px;
+    margin: 20px 0;
+    border-left: 3px solid;
+    display: flex; gap: 12px; align-items: flex-start;
+    font-size: 14px;
+  }
+
+  .callout-icon { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+
+  .callout p { margin: 0; font-size: 14px; }
+
+  .callout-info { background: rgba(60,168,255,0.06); border-color: var(--blue); }
+  .callout-info .callout-icon, .callout-info p { color: #7cc8ff; }
+
+  .callout-warn { background: rgba(255,210,60,0.06); border-color: var(--yellow); }
+  .callout-warn .callout-icon, .callout-warn p { color: #ffe080; }
+
+  .callout-tip { background: rgba(60,255,160,0.05); border-color: var(--green); }
+  .callout-tip .callout-icon, .callout-tip p { color: #7affcc; }
+
+  /* ── COMPONENT CARDS ── */
+  .component-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 12px;
+    margin: 20px 0;
+  }
+
+  .component-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px;
+    transition: border-color .2s, transform .2s;
+    cursor: default;
+  }
+
+  .component-card:hover {
+    border-color: var(--border2);
+    transform: translateY(-2px);
+  }
+
+  .component-card-icon {
+    font-size: 20px; margin-bottom: 8px;
+  }
+
+  .component-card-name {
+    font-family: var(--font-mono);
+    font-size: 13px; font-weight: 600;
+    color: var(--text);
+    margin-bottom: 4px;
+  }
+
+  .component-card-desc {
+    font-size: 12.5px;
+    color: var(--text3);
+    line-height: 1.5;
+  }
+
+  /* ── METHOD BLOCK ── */
+  .method-block {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+    margin: 24px 0;
+  }
+
+  .method-header {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 12px 18px;
+    display: flex; align-items: center; gap: 10px;
+  }
+
+  .method-badge {
+    font-family: var(--font-mono);
+    font-size: 10px; font-weight: 700;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    padding: 2px 7px; border-radius: 4px;
+  }
+
+  .mb-function { background: rgba(160,212,255,0.1); color: var(--blue); border: 1px solid rgba(160,212,255,0.2); }
+  .mb-method { background: rgba(176,60,255,0.1); color: var(--purple); border: 1px solid rgba(176,60,255,0.2); }
+  .mb-event { background: rgba(255,210,60,0.1); color: var(--yellow); border: 1px solid rgba(255,210,60,0.2); }
+
+  .method-name {
+    font-family: var(--font-mono);
+    font-size: 14px; font-weight: 600;
+    color: var(--text);
+  }
+
+  .method-body {
+    padding: 16px 18px;
+  }
+
+  .method-body p {
+    font-size: 14px; margin-bottom: 12px;
+  }
+
+  /* ── DIVIDER ── */
+  hr {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 40px 0;
+  }
+
+  /* ── RETURN BADGE ── */
+  .returns {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--text3);
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    padding: 3px 8px; border-radius: 4px;
+    margin-top: 6px;
+  }
+
+  .returns span { color: var(--green); }
+
+  /* ── FOOTER ── */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 28px 64px;
+    display: flex; align-items: center; justify-content: space-between;
+    color: var(--text3);
+    font-family: var(--font-mono);
+    font-size: 12px;
+  }
+
+  /* ── MISC ── */
+  ul {
+    list-style: none;
+    margin: 12px 0 16px 0;
+  }
+
+  ul li {
+    padding: 5px 0;
+    color: var(--text2);
+    font-size: 14.5px;
+    padding-left: 18px;
+    position: relative;
+  }
+
+  ul li::before {
+    content: '→';
+    position: absolute; left: 0;
+    color: var(--accent);
+    font-size: 12px;
+  }
+
+  .tag-group { display: flex; gap: 6px; flex-wrap: wrap; margin: 12px 0; }
+
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+
+  /* ── STICKY TOC LINE ── */
+  .toc-line {
+    width: 1px;
+    background: var(--border);
+    position: absolute; left: 0; top: 0; bottom: 0;
+    transition: height .2s;
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 900px) {
+    aside { display: none; }
+    main { padding: 32px 24px 64px; }
+    footer { padding: 20px 24px; flex-direction: column; gap: 8px; text-align: center; }
+  }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  main > section {
+    animation: fadeIn .4s ease both;
+  }
+
+  main > section:nth-child(1) { animation-delay: .05s; }
+  main > section:nth-child(2) { animation-delay: .1s; }
+  main > section:nth-child(3) { animation-delay: .15s; }
+
+  .glow-line {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--accent), transparent);
+    opacity: 0.4;
+    margin: 12px 0 40px;
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <a class="header-logo" href="#">
+    <div class="logo-mark">B</div>
+    <span>Boron UI</span>
+    <span class="header-tag">Docs</span>
+  </a>
+  <div class="header-right">
+    <a href="#getting-started">Get Started</a>
+    <a href="#components">Components</a>
+    <a href="#theming">Theming</a>
+  </div>
+</header>
+
+<!-- LAYOUT -->
+<div class="layout">
+
+  <!-- SIDEBAR -->
+  <aside>
+    <nav>
+      <div class="nav-section">
+        <div class="nav-section-title">Introduction</div>
+        <a class="nav-item active" href="#overview">Overview</a>
+        <a class="nav-item" href="#getting-started">Getting Started</a>
+        <a class="nav-item" href="#window">Create Window</a>
+      </div>
+      <div class="nav-section">
+        <div class="nav-section-title">Layout</div>
+        <a class="nav-item" href="#tabs">Tabs</a>
+        <a class="nav-item" href="#groupboxes">Groupboxes</a>
+        <a class="nav-item" href="#tabboxes">Tabboxes</a>
+        <a class="nav-item" href="#dependency-box">Dependency Box</a>
+      </div>
+      <div class="nav-section">
+        <div class="nav-section-title">Components</div>
+        <a class="nav-item" href="#toggle">Toggle <span class="nav-badge">+addon</span></a>
+        <a class="nav-item" href="#slider">Slider</a>
+        <a class="nav-item" href="#button">Button</a>
+        <a class="nav-item" href="#input">Input</a>
+        <a class="nav-item" href="#dropdown">Dropdown</a>
+        <a class="nav-item" href="#label">Label</a>
+        <a class="nav-item" href="#divider">Divider</a>
+      </div>
+      <div class="nav-section">
+        <div class="nav-section-title">Addons</div>
+        <a class="nav-item" href="#color-picker">Color Picker</a>
+        <a class="nav-item" href="#key-picker">Key Picker</a>
+      </div>
+      <div class="nav-section">
+        <div class="nav-section-title">Global</div>
+        <a class="nav-item" href="#theming">Theming</a>
+        <a class="nav-item" href="#watermark">Watermark</a>
+        <a class="nav-item" href="#notifications">Notifications</a>
+        <a class="nav-item" href="#keybinds">Keybind HUD</a>
+        <a class="nav-item" href="#options">Toggles & Options</a>
+      </div>
+    </nav>
+  </aside>
+
+  <!-- MAIN -->
+  <main>
+
+    <!-- OVERVIEW -->
+    <section id="overview">
+      <div class="section-label">Documentation v1.0</div>
+      <h1>Boron UI Library</h1>
+      <div class="glow-line"></div>
+      <p class="hero-desc">
+        A feature-rich, themeable Roblox UI library for building sleek in-game menus. Supports toggles, sliders, dropdowns, color pickers, key bindings, notifications, and more.
+      </p>
+      <div class="hero-badges">
+        <span class="badge badge-red">Roblox</span>
+        <span class="badge badge-green">Lua 5.1</span>
+        <span class="badge badge-blue">CoreGui Safe</span>
+        <span class="badge badge-yellow">Rainbow Support</span>
+      </div>
+
+      <h2><span class="h2-icon">📦</span> Component Overview</h2>
+      <div class="component-grid">
+        <div class="component-card">
+          <div class="component-card-icon">☑️</div>
+          <div class="component-card-name">Toggle</div>
+          <div class="component-card-desc">Boolean on/off switch with addon support.</div>
+        </div>
+        <div class="component-card">
+          <div class="component-card-icon">🎚️</div>
+          <div class="component-card-name">Slider</div>
+          <div class="component-card-desc">Numeric range selector with rounding.</div>
+        </div>
+        <div class="component-card">
+          <div class="component-card-icon">🔘</div>
+          <div class="component-card-name">Button</div>
+          <div class="component-card-desc">Clickable action button, with sub-button and double-click confirm.</div>
+        </div>
+        <div class="component-card">
+          <div class="component-card-icon">📝</div>
+          <div class="component-card-name">Input</div>
+          <div class="component-card-desc">Text field with numeric mode and placeholder.</div>
+        </div>
+        <div class="component-card">
+          <div class="component-card-icon">📋</div>
+          <div class="component-card-name">Dropdown</div>
+          <div class="component-card-desc">Single or multi-select with scrollable list.</div>
+        </div>
+        <div class="component-card">
+          <div class="component-card-icon">🎨</div>
+          <div class="component-card-name">Color Picker</div>
+          <div class="component-card-desc">HSV + Hex + RGB picker with transparency support.</div>
+        </div>
+        <div class="component-card">
+          <div class="component-card-icon">⌨️</div>
+          <div class="component-card-name">Key Picker</div>
+          <div class="component-card-desc">Keybind selector with Always/Toggle/Hold modes.</div>
+        </div>
+        <div class="component-card">
+          <div class="component-card-icon">🔔</div>
+          <div class="component-card-name">Notifications</div>
+          <div class="component-card-desc">Animated toast-style notification system.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- GETTING STARTED -->
+    <section id="getting-started">
+      <div class="section-label">Setup</div>
+      <h2><span class="h2-icon">🚀</span> Getting Started</h2>
+      <p>Load the library using <code>loadstring</code> or by requiring it directly. The library returns a <code>Library</code> object used to create windows and manage the entire UI.</p>
+
+      <div class="code-block">
+        <div class="code-header">
+          <span class="code-lang">Lua</span>
+          <div class="code-dots"><div class="code-dot dot-r"></div><div class="code-dot dot-y"></div><div class="code-dot dot-g"></div></div>
+        </div>
+        <pre><code><span class="cmt">-- Load the library</span>
+<span class="kw">local</span> <span class="var">Library</span> <span class="punct">=</span> <span class="fn">loadstring</span><span class="punct">(</span><span class="fn">game</span><span class="punct">:</span><span class="fn">HttpGet</span><span class="punct">(</span><span class="str">'YOUR_LIBRARY_URL'</span><span class="punct">))()</span>
+
+<span class="cmt">-- Access global state tables</span>
+<span class="kw">local</span> <span class="var">Toggles</span> <span class="punct">=</span> <span class="var">getgenv</span><span class="punct">().</span><span class="var">Toggles</span>
+<span class="kw">local</span> <span class="var">Options</span>  <span class="punct">=</span> <span class="var">getgenv</span><span class="punct">().</span><span class="var">Options</span></code></pre>
+      </div>
+
+      <div class="callout callout-info">
+        <span class="callout-icon">ℹ️</span>
+        <p>The library automatically parents itself to <code>CoreGui</code> and calls <code>protectgui</code> / <code>syn.protect_gui</code> if available.</p>
+      </div>
+    </section>
+
+    <!-- WINDOW -->
+    <section id="window">
+      <div class="section-label">Layout</div>
+      <h2><span class="h2-icon">🪟</span> Create Window</h2>
+      <p>A Window is the top-level container. It holds all Tabs, which in turn hold Groupboxes and components.</p>
+
+      <div class="code-block">
+        <div class="code-header"><span class="code-lang">Lua</span><div class="code-dots"><div class="code-dot dot-r"></div><div class="code-dot dot-y"></div><div class="code-dot dot-g"></div></div></div>
+        <pre><code><span class="kw">local</span> <span class="var">Window</span> <span class="punct">=</span> <span class="var">Library</span><span class="punct">:</span><span class="fn">CreateWindow</span><span class="punct">({</span>
+    <span class="var">Title</span>        <span class="punct">=</span> <span class="str">'My Script'</span><span class="punct">,</span>
+    <span class="var">Center</span>       <span class="punct">=</span> <span class="kw">true</span><span class="punct">,</span>          <span class="cmt">-- Center on screen</span>
+    <span class="var">AutoShow</span>     <span class="punct">=</span> <span class="kw">true</span><span class="punct">,</span>          <span class="cmt">-- Show immediately</span>
+    <span class="var">MenuFadeTime</span> <span class="punct">=</span> <span class="num">0.2</span><span class="punct">,</span>           <span class="cmt">-- Toggle fade duration</span>
+    <span class="var">TabPadding</span>   <span class="punct">=</span> <span class="num">0</span><span class="punct">,</span>             <span class="cmt">-- Padding between tabs</span>
+    <span class="var">Position</span>     <span class="punct">=</span> <span class="fn">UDim2</span><span class="punct">.</span><span class="fn">fromOffset</span><span class="punct">(</span><span class="num">175</span><span class="punct">,</span> <span class="num">50</span><span class="punct">),</span>
+    <span class="var">Size</span>         <span class="punct">=</span> <span class="fn">UDim2</span><span class="punct">.</span><span class="fn">fromOffset</span><span class="punct">(</span><span class="num">750</span><span class="punct">,</span> <span class="num">550</span><span class="punct">),</span>
+<span class="punct">})</span></code></pre>
+      </div>
+
+      <table class="param-table">
+        <thead><tr><th>Property</th><th>Type</th><th>Required</th><th>Description</th></tr></thead>
+        <tbody>
+          <tr><td>Title</td><td>string</td><td><span class="req-tag opt">opt</span></td><td>Window title displayed at the top. Defaults to <code>'No title'</code>.</td></tr>
+          <tr><td>Center</td><td>boolean</td><td><span class="req-tag opt">opt</span></td><td>If true, anchors the window at the center of the screen.</td></tr>
+          <tr><td>AutoShow</td><td>boolean</td><td><span class="req-tag opt">opt</span></td><td>Automatically toggle (show) the menu on load.</td></tr>
+          <tr><td>MenuFadeTime</td><td>number</td><td><span class="req-tag opt">opt</span></td><td>Duration in seconds for the show/hide fade animation. Default: <code>0.2</code>.</td></tr>
+          <tr><td>Position</td><td>UDim2</td><td><span class="req-tag opt">opt</span></td><td>Starting position. Default: <code>UDim2.fromOffset(175, 50)</code>.</td></tr>
+          <tr><td>Size</td><td>UDim2</td><td><span class="req-tag opt">opt</span></td><td>Window size. Default: <code>UDim2.fromOffset(750, 550)</code>.</td></tr>
+        </tbody>
+      </table>
+
+      <h3>Library:Toggle()</h3>
+      <p>Toggles the visibility of the main menu with a fade animation. Bound by default to <code>RightControl</code> or <code>RightShift</code>. You can also bind a custom key via <code>Library.ToggleKeybind</code>.</p>
+
+      <div class="callout callout-tip">
+        <span class="callout-icon">💡</span>
+        <p>Set <code>Library.ToggleKeybind = Options.MyKeypicker</code> after creating a Key Picker to use it as the menu toggle.</p>
+      </div>
+    </section>
+
+    <!-- TABS -->
+    <section id="tabs">
+      <div class="section-label">Layout</div>
+      <h2><span class="h2-icon">📑</span> Tabs</h2>
+      <p>Tabs are the top-level navigation inside a window. Each tab has a left column and a right column for groupboxes.</p>
+
+      <div class="code-block">
+        <div class="code-header"><span class="code-lang">Lua</span><div class="code-dots"><div class="code-dot dot-r"></div><div class="code-dot dot-y"></div><div class="code-dot dot-g"></div></div></div>
+        <pre><code><span class="kw">local</span> <span class="var">Tab</span> <span class="punct">=</span> <span class="var">Window</span><span class="punct">:</span><span class="fn">AddTab</span><span class="punct">(</span><span class="str">'Combat'</span><span class="punct">)</span>
+
+<span class="cmt">-- First tab is shown automatically</span>
+<span class="var">Tab</span><span class="punct">:</span><span class="fn">ShowTab</span><span class="punct">()</span>  <span class="cmt">-- manually show</span>
+<span class="var">Tab</span><span class="punct">:</span><span class="fn">HideTab</span><span class="punct">()</span>  <span class="cmt">-- manually hide</span></code></pre>
+      </div>
+    </section>
+
+    <!-- GROUPBOXES -->
+    <section id="groupboxes">
+      <div class="section-label">Layout</div>
+      <h2><span class="h2-icon">📦</span> Groupboxes</h2>
+      <p>Groupboxes are containers inside a tab. They auto-resize as you add elements. Place them on the left or right side.</p>
+
+      <div class="code-block">
+        <div class="code-header"><span class="code-lang">Lua</span><div class="code-dots"><div class="code-dot dot-r"></div><div class="code-dot dot-y"></div><div class="code-dot dot-g"></div></div></div>
+        <pre><code><span class="kw">local</span> <span class="var">LeftBox</span>  <span class="punct">=</span> <span class="var">Tab</span><span class="punct">:</span><span class="fn">AddLeftGroupbox</span><span class="punct">(</span><span class="str">'Settings'</span><span class="punct">)</span>
+<span class="kw">local</span> <span class="var">RightBox</span> <span class="punct">=</span> <span class="var">Tab</span><span class="punct">:</span><span class="fn">AddRightGroupbox</span><span class="punct">(</span><span class="str">'Info'</span><span class="punct">)</span>
+
+<span class="cmt">-- Or with full config:</span>
+<span class="kw">local</span> <span class="var">Box</span> <span class="punct">=</span> <span class="var">Tab</span><span class="punct">:</span><span class="fn">AddGroupbox</span><span class="punct">({</span>
+    <span class="var">Name</span> <span class="punct">=</span> <span class="str">'Settings'</span><span class="punct">,</span>
+    <span class="var">Side</span> <span class="punct">=</span> <span class="num">1</span><span class="punct">,</span>  <span class="cmt">-- 1 = left, 2 = right</span>
+<span class="punct">})</span></code></pre>
+      </div>
+    </section>
+
+    <!-- TABBOXES -->
+    <section id="tabboxes">
+      <div class="section-label">Layout</div>
+      <h2><span class="h2-icon">🗂️</span> Tabboxes</h2>
+      <p>Tabboxes are sub-tab containers that sit inside a column, letting you split content into nested pages.</p>
+
+      <div class="code-block">
+        <div class="code-header"><span class="code-lang">Lua</span><div class="code-dots"><div class="code-dot dot-r"></div><div class="code-dot dot-y"></div><div class="code-dot dot-g"></div></div></div>
+        <pre><code><span class="kw">local</span> <span class="var">Tabbox</span> <span class="punct">=</span> <span class="var">Tab</span><span class="punct">:</span><span class="fn">AddLeftTabbox</span><span class="punct">()</span>
+
+<span class="kw">local</span> <span class="var">SubA</span> <span class="punct">=</span> <span class="var">Tabbox</span><span class="punct">:</span><span class="fn">AddTab</span><span class="punct">(</span><span class="str">'Page A'</span><span class="punct">)</span>
+<span class="kw">local</span> <span class="var">SubB</span> <span class="punct">=</span> <span class="var">Tabbox</span><span class="punct">:</span><span class="fn">AddTab</span><span class="punct">(</span><span class="str">'Page B'</span><span class="punct">)</span>
+
+<span class="cmt">-- Add elements to each sub-tab like a normal groupbox</span>
+<span class="var">SubA</span><span class="punct">:</span><span class="fn">AddToggle</span><span class="punct">(</span><span class="str">'MyToggle'</span><span class="punct">,</span> <span class="punct">{ </span><span class="var">Text</span> <span class="punct">=</span> <span class="str">'Feature A'</span> <span class="punct">})</span></code></pre>
+      </div>
+    </section>
+
+    <!-- DEPENDENCY BOX -->
+    <section id="dependency-box">
+      <div class="section-label">Layout</div>
+      <h2><span class="h2-icon">🔗</span> Dependency Box</h2>
+      <p>A Dependency Box is a groupbox that shows or hides its contents based on the state of a Toggle. Useful for hiding advanced settings until a feature is enabled.</p>
+
+      <div class="code-block">
+        <div class="code-header"><span class="code-lang">Lua</span><div class="code-dots"><div class="code-dot dot-r"></div><div class="code-dot dot-y"></div><div class="code-dot dot-g"></div></div></div>
+        <pre><code><span class="kw">local</span> <span class="var">Depbox</span> <span class="punct">=</span> <span class="var">LeftBox</span><span class="punct">:</span><span class="fn">AddDependencyBox</span><span class="punct">()</span>
+
+<span class="var">Depbox</span><span class="punct">:</span><span class="fn">AddSlider</span><span class="punct">(</span><span class="str">'MySlider'</span><span class="punct">,</span> <span class="punct">{</span>
+    <span class="var">Text</span>     <span class="punct">=</span> <span class="str">'Speed'</span><span class="punct">,</span>
+    <span class="var">Default</span>  <span class="punct">=</span> <span class="num">50</span><span class="punct">,</span>
+    <span class="var">Min</span>      <span class="punct">=</span> <span class="num">0</span><span class="punct">,</span>
+    <span class="var">Max</span>      <span class="punct">=</span> <span class="num">100</span><span class="punct">,</span>
+    <span class="var">Rounding</span> <span class="punct">=</span> <span class="num">0</span><span class="punct">,</span>
+<span class="punct">})</span>
+
+<span class="cmt">-- Show Depbox only when 'SpeedToggle' is true</span>
+<span class="var">Depbox</span><span class="punct">:</span><span class="fn">SetupDependencies</span><span class="punct">({</span>
+    <span class="punct">{ </span><span class="var">Toggles</span><span class="punct">.</span><span class="var">SpeedToggle</span><span class="punct">,</span> <span class="kw">true</span> <span class="punct">}</span>
+<span class="punct">})</span></code></pre>
+      </div>
+
+      <table class="param-table">
+        <thead><tr><th>Arg</th><th>Type</th><th>Description</th></tr></thead>
+        <tbody>
+          <tr><td>Dependencies</td><td>table</td><td>Array of <code>{ ToggleObject, expectedValue }</code> pairs. All must match for the box to show.</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <hr>
+
+    <!-- TOGGLE -->
+    <section id="toggle">
+      <div class="section-label">Component</div>
+      <h2><span class="h2-icon">☑️</span> Toggle</h2>
+      <p>A simple on/off boolean switch. Supports addons (Color Picker, Key Picker), tooltip, and a <code>Risky</code> flag that renders the label in red.</p>
+
+      <div class="code-block">
+        <div class="code-header"><span class="code-lang">Lua</span><div class="code-dots"><div class="code-dot dot-r"></div><div class="code-dot dot-y"></div><div class="code-dot dot-g"></div></div></div>
+        <pre><code><span class="var">LeftBox</span><span class="punct">:</span><span class="fn">AddToggle</span><span class="punct">(</span><span class="str">'AutoFarm'</span><span class="punct">,</span> <span class="punct">{</span>
+    <span class="var">Text</span>    <span class="punct">=</span> <span class="str">'Auto Farm'</span><span class="punct">,</span>
+    <span class="var">Default</span> <span class="punct">=</span> <span class="kw">false</span><span class="punct">,</span>
+    <span class="var">Tooltip</span> <span class="punct">=</span> <span class="str">'Automatically farms resources'</span><span class="punct">,</span>
+    <span class="var">Risky</span>   <span class="punct">=</span> <span class="kw">false</span><span class="punct">,</span>
+    <span class="var">Callback</span> <span class="punct">=</span> <span class="kw">function</span><span class="punct">(</span><span class="var">Value</span><span class="punct">)</span>
+        <span class="fn">print</span><span class="punct">(</span><span class="str">'Auto Farm:'</span><span class="punct">,</span> <span class="var">Value</span><span class="punct">)</span>
+    <span class="kw">end</span>
+<span class="punct">})</span>
+
+<span class="cmt">-- Read / write value</span>
+<span class="var">Toggles</span><span class="punct">.</span><span class="var">AutoFarm</span><span class="punct">:</span><span class="fn">SetValue</span><span class="punct">(</span><span class="kw">true</span><span class="punct">)</span>
+<span class="fn">print</span><span class="punct">(</span><span class="var">Toggles</span><span class="punct">.</span><span class="var">AutoFarm</span><span class="punct">.</span><span class="var">Value</span><span class="punct">)</span>
+
+<span class="cmt">-- Listen for changes</span>
+<span class="var">Toggles</span><span class="punct">.</span><span class="var">AutoFarm</span><span class="punct">:</span><span class="fn">OnChanged</span><span class="punct">(</span><span class="kw">function</span><span class="punct">(</span><span class="var">v</span><span class="punct">)</span>
+    <span class="fn">print</span><span class="punct">(</span><span class="str">'Changed to:'</span><span class="punct">,</span> <span class="var">v</span><span class="punct">)</span>
+<span class="kw">end</span><span class="punct">)</span></code></pre>
+      </div>
+
+      <table class="param-table">
+        <thead><tr><th>Property</th><th>Type</th><th>Required</th><th>Description</th></tr></thead>
+        <tbody>
+          <tr><td>Text</td><td>string</td><td><span class="req-tag req">req</span></td><td>Label displayed next to the checkbox.</td></tr>
+          <tr><td>Default</td><td>boolean</td><td><span class="req-tag opt">opt</span></td><td>Initial value. Defaults to <code>false</code>.</td></tr>
+          <tr><td>Tooltip</td><td>string</td><td><span class="req-tag opt">opt</span></td><td>Hover tooltip text.</td></tr>
+          <tr><td>Risky</td><td>boolean</td><td><span class="req-tag opt">opt</span></td><td>Renders the label in <code>RiskColor</code> (red) to warn users.</td></tr>
+          <tr><td>Callback</td><td>function(bool)</td><td><span class="req-tag opt">opt</span></td><td>Called whenever the value changes.</td></tr>
+        </tbody>
+      </table>
+
+      <div class="callout callout-tip">
+        <span class="callout-icon">💡</span>
+        <p>Toggles are stored in the global <code>Toggles</code> table by their <code>Idx</code> string. Access them anywhere with <code>Toggles.MyIdx</code>.</p>
+      </div>
+    </section>
+
+    <!-- SLIDER -->
+    <section id="slider">
+      <div class="section-label">Component</div>
+      <h2><span class="h2-icon">🎚️</span> Slider</h2>
+      <p>A draggable horizontal slider for selecting a numeric value within a range.</p>
+
+      <div class="code-block">
+        <div class="code-header"><span class="code-lang">Lua</span><div class="code-dots"><div class="code-dot dot-r"></div><div class="code-dot dot-y"></div><div class="code-dot dot-g"></div></div></div>
+        <pre><code><span class="var">LeftBox</span><span class="punct">:</span><span class="fn">AddSlider</span><span class="punct">(</span><span class="str">'WalkSpeed'</span><span class="punct">,</span> <span class="punct">{</span>
+    <span class="var">Text</span>     <span class="punct">=</span> <span class="str">'Walk Speed'</span><span class="punct">,</span>
+    <span class="var">Default</span>  <span class="punct">=</span> <span class="num">16</span><span class="punct">,</span>
+    <span class="var">Min</span>      <span class="punct">=</span> <span class="num">0</span><span class="punct">,</span>
+    <span class="var">Max</span>      <span class="punct">=</span> <span class="num">200</span><span class="punct">,</span>
+    <span class="var">Rounding</span> <span class="punct">=</span> <span class="num">0</span><span class="punct">,</span>         <span class="cmt">-- 0 = integer, 1+ = decimal places</span>
+    <span class="var">Suffix</span>   <span class="punct">=</span> <span class="str">' stud/s'</span><span class="punct">,</span>
+    <span class="var">Compact</span>  <span class="punct">=</span> <span class="kw">false</span><span class="punct">,</span>      <span class="cmt">-- No label above slider</span>
+    <span class="var">HideMax</span>  <span class="punct">=</span> <span class="kw">false</span><span class="punct">,</span>      <span class="cmt">-- Hide the /Max part</span>
+    <span class="var">Tooltip</span>  <span class="punct">=</span> <span class="str">'Player walk speed'</span><span class="punct">,</span>
+    <span class="var">Callback</span> <span class="punct">=</span> <span class="kw">function</span><span class="punct">(</span><span class="var">Value</span><span class="punct">)</span>
+        <span class="var">game</span><span class="punct">.</span><span class="var">Players</span><span class="punct">.</span><span class="var">LocalPlayer</span><span class="punct">.</span><span class="var">Character</span><span class="punct">.</span><span class="var">Humanoid</span><span class="punct">.</span><span class="var">WalkSpeed</span> <span class="punct">=</span> <span class="var">Value</span>
+    <span class="kw">end</span>
+<span class="punct">})</span>
+
+<span class="cmt">-- Set programmatically</span>
+<span class="var">Options</span><span class="punct">.</span><span class="var">WalkSpeed</span><span class="punct">:</span><span class="fn">SetValue</span><span class="punct">(</span><span class="num">50</span><span class="punct">)</span></code></pre>
+      </div>
+
+      <table class="param-table">
+        <thead><tr><th>Property</th><th>Type</th><th>Required</th><th>Description</th></tr></thead>
+        <tbody>
+          <tr><td>Text</td><td>string</td><td><span class="req-tag req">req</span></td><td>Label displayed above the slider.</td></tr>
+          <tr><td>Default</td><td>number</td><td><span class="req-tag req">req</span></td><td>Initial value.</td></tr>
+          <tr><td>Min</td><td>number</td><td><span class="req-tag req">req</span></td><td>Minimum value.</td></tr>
+          <tr><td>Max</td><td>number</td><td><span class="req-tag req">req</span></td><td>Maximum value.</td></tr>
+          <tr><td>Rounding</td><td>number</td><td><span class="req-tag req">req</span></td><td>Decimal precision. <code>0</code> = integer.</td></tr>
+          <tr><td>Suffix</td><td>string</td><td><span class="req-tag opt">opt</span></td><td>Text appended to the displayed value (e.g. <code>' ms'</code>).</td></tr>
+          <tr><td>Compact</td><td>boolean</td><td><span class="req-tag opt">opt</span></td><td>Removes the label row; text shown inline on the slider.</td></tr>
+          <tr><td>HideMax</td><td>boolean</td><td><span class="req-tag opt">opt</span></td><td>Hides the <code>/Max</code> part of the display.</td></tr>
+          <tr><td>Tooltip</td><td>string</td><td><span class="req-tag opt">opt</span></td><td>Hover tooltip text.</td></tr>
+          <tr><td>Callback</td><td>function(number)</td><td><span class="req-tag opt">opt</span></td><td>Called every time the value changes while dragging.</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- BUTTON -->
+    <section id="button">
+      <div class="section-label">Component</div>
+      <h2><span class="h2-icon">🔘</span> Button</h2>
+      <p>A clickable button that fires a callback. Supports an optional second button inline and a double-click confirmation mode.</p>
+
+      <div class="code-block">
+        <div class="code-header"><span class="code-lang">Lua</span><div class="code-dots"><div class="code-dot dot-r"></div><div class="code-dot dot-y"></div><div class="code-dot dot-g"></div></div></div>
+        <pre><code><span class="kw">local</span> <span class="var">Btn</span> <span class="punct">=</span> <span class="var">LeftBox</span><span class="punct">:</span><span class="fn">AddButton</span><span class="punct">({</span>
+    <span class="var">Text</span>        <span class="punct">=</span> <span class="str">'Teleport Home'</span><span class="punct">,</span>
+    <span class="var">Func</span>        <span class="punct">=</span> <span class="kw">function</span><span class="punct">()</span> <span class="fn">print</span><span class="punct">(</span><span class="str">'teleporting!'</span><span class="punct">)</span> <span class="kw">end</span><span class="punct">,</span>
+    <span class="var">DoubleClick</span> <span class="punct">=</span> <span class="kw">false</span><span class="punct">,</span>  <span class="cmt">-- Require double-click confirmation</span>
+    <span class="var">Tooltip</span>     <span class="punct">=</span> <span class="str">'Teleport to spawn'</span><span class="punct">,</span>
+<span class="punct">})</span>
+
+<span class="cmt">-- Attach a second button (appears inline to the right)</span>
+<span class="var">Btn</span><span class="punct">:</span><span class="fn">AddButton</span><span class="punct">({</span>
+    <span class="var">Text</span> <span class="punct">=</span> <span class="str">'Options'</span><span class="punct">,</span>
+    <span class="var">Func</span> <span class="punct">=</span> <span class="kw">function</span><span class="punct">()</span> <span class="fn">print</span><span class="punct">(</span><span class="str">'options!'</span><span class="punct">)</span> <span class="kw">end</span>
+<span class="punct">})</span></code></pre>
+      </div>
+
+      <table class="param-table">
+        <thead><tr><th>Property</th><th>Type</th><th>Required</th><th>Description</th></tr></thead>
+        <tbody>
+          <tr><td>Text</td><td>string</td><td><span class="req-tag req">req</span></td><td>Button label.</td></tr>
+          <tr><td>Func</td><td>function()</td><td><span class="req-tag req">req</span></td><td>Callback fired on click.</td></tr>
+          <tr><td>DoubleClick</td><td>boolean</td><td><span class="req-tag opt">opt</span></td><td>If true, requires a second click within 0.5s to confirm.</td></tr>
+          <tr><td>Tooltip</td><td>string</td><td><span class="req-tag opt">opt</span></td><td>Hover tooltip text.</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- INPUT -->
+    <section id="input">
+      <div class="section-label">Component</div>
+      <h2><span class="h2-icon">📝</span> Input</h2>
+      <p>A text input field with optional numeric validation, placeholder text, and a max length constraint.</p>
+
+      <div class="code-block">
+        <div class="code-header"><span class="code-lang">Lua</span><div class="code-dots"><div class="code-dot dot-r"></div><div class="code-dot dot-y"></div><div class="code-dot dot-g"></div></div></div>
+        <pre><code><span class="var">LeftBox</span><span class="punct">:</span><span class="fn">AddInput</span><span class="punct">(</span><span class="str">'PlayerName'</span><span class="punct">,</span> <span class="punct">{</span>
+    <span class="var">Text</span>        <span class="punct">=</span> <span class="str">'Target Player'</span><span class="punct">,</span>
+    <span class="var">Default</span>     <span class="punct">=</span> <span class="str">''</span><span class="punct">,</span>
+    <span class="var">Placeholder</span> <span class="punct">=</span> <span class="str">'Enter name...'</span><span class="punct">,</span>
+    <span class="var">Numeric</span>     <span class="punct">=</span> <span class="kw">false</span><span class="punct">,</span>   <span class="cmt">-- Only allow numbers</span>
+    <span class="var">Finished</span>    <span class="punct">=</span> <span class="kw">false</span><span class="punct">,</span>   <span class="cmt">-- Fire only on Enter, not every keystroke</span>
+    <span class="var">MaxLength</span>   <span class="punct">=</span> <span class="num">64</span><span class="punct">,</span>
+    <span class="var">Tooltip</span>     <span class="punct">=</span> <span class="str">'Name of target player'</span><span class="punct">,</span>
+    <span class="var">Callback</span>    <span class="punct">=</span> <span class="kw">function</span><span class="punct">(</span><span class="var">Value</span><span class="punct">)</span>
+        <span class="fn">print</span><span class="punct">(</span><span class="str">'Input:'</span><span class="punct">,</span> <span class="var">Value</span><span class="punct">)</span>
+    <span class="kw">end</span>
+<span class="punct">})</span>
+
+<span class="cmt">-- Set programmatically</span>
+<span class="var">Options</span><span class="punct">.</span><span class="var">PlayerName</span><span class="punct">:</span><span class="fn">SetValue</span><span class="punct">(</span><span class="str">'Roblox'</span><span class="punct">)</span></code></pre>
+      </div>
+
+      <table class="param-table">
+        <thead><tr><th>Property</th><th>Type</th><th>Required</th><th>Description</th></tr></thead>
+        <tbody>
+          <tr><td>Text</td><td>string</td><td><span class="req-tag req">req</span></td><td>Label displayed above the text box.</td></tr>
+          <tr><td>Default</td><td>string</td><td><span class="req-tag opt">opt</span></td><td>Initial text content.</td></tr>
+          <tr><td>Placeholder</td><td>string</td><td><span class="req-tag opt">opt</span></td><td>Greyed-out hint text when box is empty.</td></tr>
+          <tr><td>Numeric</td><td>boolean</td><td><span class="req-tag opt">opt</span></td><td>Only accepts numeric characters.</td></tr>
+          <tr><td>Finished</td><td>boolean</td><td><span class="req-tag opt">opt</span></td><td>Callback fires only when Enter is pressed, not on every keystroke.</td></tr>
+          <tr><td>MaxLength</td><td>number</td><td><span class="req-tag opt">opt</span></td><td>Truncates input to this character count.</td></tr>
+          <tr><td>Callback</td><td>function(string)</td><td><span class="req-tag opt">opt</span></td><td>Fires on text change (or on Enter if <code>Finished</code> is true).</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- DROPDOWN -->
+    <section id="dropdown">
+      <div class="section-label">Component</div>
+      <h2><span class="h2-icon">📋</span> Dropdown</h2>
+      <p>A scrollable dropdown list. Supports single and multi-select modes, as well as special types that auto-populate with players or teams.</p>
+
+      <div class="code-block">
+        <div class="code-header"><span class="code-lang">Lua</span><div class="code-dots"><div class="code-dot dot-r"></div><div class="code-dot dot-y"></div><div class="code-dot dot-g"></div></div></div>
+        <pre><code><span class="cmt">-- Single select</span>
+<span class="var">LeftBox</span><span class="punct">:</span><span class="fn">AddDropdown</span><span class="punct">(</span><span class="str">'WeaponType'</span><span class="punct">,</span> <span class="punct">{</span>
+    <span class="var">Text</span>      <span class="punct">=</span> <span class="str">'Weapon Type'</span><span class="punct">,</span>
+    <span class="var">Values</span>    <span class="punct">=</span> <span class="punct">{</span> <span class="str">'Sword'</span><span class="punct">,</span> <span class="str">'Bow'</span><span class="punct">,</span> <span class="str">'Staff'</span> <span class="punct">},</span>
+    <span class="var">Default</span>   <span class="punct">=</span> <span class="str">'Sword'</span><span class="punct">,</span>
+    <span class="var">AllowNull</span> <span class="punct">=</span> <span class="kw">false</span><span class="punct">,</span>
+    <span class="var">Callback</span>  <span class="punct">=</span> <span class="kw">function</span><span class="punct">(</span><span class="var">Value</span><span class="punct">)</span> <span class="fn">print</span><span class="punct">(</span><span class="var">Value</span><span class="punct">)</span> <span class="kw">end</span>
+<span class="punct">})</span>
+
+<span class="cmt">-- Multi-select</span>
+<span class="var">LeftBox</span><span class="punct">:</span><span class="fn">AddDropdown</span><span class="punct">(</span><span class="str">'Features'</span><span class="punct">,</span> <span class="punct">{</span>
+    <span class="var">Text</span>    <span class="punct">=</span> <span class="str">'Active Features'</span><span class="punct">,</span>
+    <span class="var">Values</span>  <span class="punct">=</span> <span class="punct">{</span> <span class="str">'ESP'</span><span class="punct">,</span> <span class="str">'Aimbot'</span><span class="punct">,</span> <span class="str">'Speed'</span> <span class="punct">},</span>
+    <span class="var">Default</span> <span class="punct">=</span> <span class="punct">{</span> <span class="str">'ESP'</span> <span class="punct">},</span>
+    <span class="var">Multi</span>   <span class="punct">=</span> <span class="kw">true</span><span class="punct">,</span>
+    <span class="var">Callback</span> <span class="punct">=</span> <span class="kw">function</span><span class="punct">(</span><span class="var">Value</span><span class="punct">)</span> <span class="cmt">-- Value is a dict {name=true}</span>
+        <span class="kw">for</span> <span class="var">k</span><span class="punct">,</span> <span class="var">_</span> <span class="kw">in</span> <span class="fn">next</span><span class="punct">,</span> <span class="var">Value</span> <span class="kw">do</span> <span class="fn">print</span><span class="punct">(</span><span class="var">k</span><span class="punct">)</span> <span class="kw">end</span>
+    <span class="kw">end</span>
+<span class="punct">})</span>
+
+<span class="cmt">-- Auto player list</span>
+<span class="var">LeftBox</span><span class="punct">:</span><span class="fn">AddDropdown</span><span class="punct">(</span><span class="str">'Target'</span><span class="punct">,</span> <span class="punct">{</span>
+    <span class="var">Text</span>        <span class="punct">=</span> <span class="str">'Target Player'</span><span class="punct">,</span>
+    <span class="var">SpecialType</span> <span class="punct">=</span> <span class="str">'Player'</span><span class="punct">,</span>  <span class="cmt">-- auto-fills + updates</span>
+<span class="punct">})</span>
+
+<span class="cmt">-- Update values at runtime</span>
+<span class="var">Options</span><span class="punct">.</span><span class="var">WeaponType</span><span class="punct">:</span><span class="fn">SetValue</span><span class="punct">(</span><span class="str">'Bow'</span><span class="punct">)</span>
+<span class="var">Options</span><span class="punct">.</span><span class="var">WeaponType</span><span class="punct">:</span><span class="fn">SetValues</span><span class="punct">({ </span><span class="str">'Axe'</span><span class="punct">,</span> <span class="str">'Spear'</span> <span class="punct">})</span></code></pre>
+      </div>
+
+      <table class="param-table">
+        <thead><tr><th>Property</th><th>Type</th><th>Required</th><th>Description</th></tr></thead>
+        <tbody>
+          <tr><td>Values</td><td>table</td><td><span class="req-tag req">req</span></td><td>Array of string options.</td></tr>
+          <tr><td>Default</td><td>string / table</td><td><span class="req-tag opt">opt</span></td><td>Default selected value(s). Required unless <code>AllowNull = true</code>.</td></tr>
+          <tr><td>Multi</td><td>boolean</td><td><span class="req-tag opt">opt</span></td><td>Allow selecting multiple values at once.</td></tr>
+          <tr><td>AllowNull</td><td>boolean</td><td><span class="req-tag opt">opt</span></td><td>Allow no selection (value will be <code>nil</code>).</td></tr>
+          <tr><td>SpecialType</td><td><code>'Player'</code> / <code>'Team'</code></td><td><span class="req-tag opt">opt</span></td><td>Auto-populate with the current player/team list. Updates live.</td></tr>
+          <tr><td>Text</td><td>string</td><td><span class="req-tag opt">opt</span></td><td>Label above the dropdown. If omitted, no label row is shown.</td></tr>
+          <tr><td>Callback</td><td>function</td><td><span class="req-tag opt">opt</span></td><td>Fires when selection changes. Value is a string or dict (multi).</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- LABEL -->
+    <section id="label">
+      <div class="section-label">Component</div>
+      <h2><span class="h2-icon">🏷️</span> Label</h2>
+      <p>A static text element. Can optionally wrap long text across multiple lines.</p>
+
+      <div class="code-block">
+        <div class="code-header"><span class="code-lang">Lua</span><div class="code-dots"><div class="code-dot dot-r"></div><div class="code-dot dot-y"></div><div class="code-dot dot-g"></div></div></div>
+        <pre><code><span class="kw">local</span> <span class="var">Lbl</span> <span class="punct">=</span> <span class="var">LeftBox</span><span class="punct">:</span><span class="fn">AddLabel</span><span class="punct">(</span><span class="str">'Version 1.0.0'</span><span class="punct">)</span>
+<span class="kw">local</span> <span class="var">LblWrap</span> <span class="punct">=</span> <span class="var">LeftBox</span><span class="punct">:</span><span class="fn">AddLabel</span><span class="punct">(</span><span class="str">'This is a longer description that wraps.'</span><span class="punct">,</span> <span class="kw">true</span><span class="punct">)</span>
+
+<span class="cmt">-- Update the text dynamically</span>
+<span class="var">Lbl</span><span class="punct">:</span><span class="fn">SetText</span><span class="punct">(</span><span class="str">'Version 1.0.1'</span><span class="punct">)</span></code></pre>
+      </div>
+
+      <div class="callout callout-info">
+        <span class="callout-icon">ℹ️</span>
+        <p>A non-wrapping label also supports addons (Color Picker, Key Picker) via the <code>BaseAddons</code> metatable — useful for labelled side controls.</p>
+      </div>
+    </section>
+
+    <!-- DIVIDER -->
+    <section id="divider">
+      <div class="section-label">Component</div>
+      <h2><span class="h2-icon">➖</span> Divider</h2>
+      <p>A thin horizontal rule to visually separate sections within a groupbox.</p>
+
+      <div class="code-block">
+        <div class="code-header"><span class="code-lang">Lua</span><div class="code-dots"><div class="code-dot dot-r"></div><div class="code-dot dot-y"></div><div class="code-dot dot-g"></div></div></div>
+        <pre><code><span class="var">LeftBox</span><span class="punct">:</span><span class="fn">AddDivider</span><span class="punct">()</span></code></pre>
+      </div>
+    </section>
+
+    <hr>
+
+    <!-- COLOR PICKER -->
+    <section id="color-picker">
+      <div class="section-label">Addon</div>
+      <h2><span class="h2-icon">🎨</span> Color Picker</h2>
+      <p>Attaches a compact color swatch to a Toggle or Label. Clicking it opens an HSV picker with Hex and RGB text inputs. Right-clicking opens a context menu to copy/paste colors.</p>
+
+      <div class="code-block">
+        <div class="code-header"><span class="code-lang">Lua</span><div class="code-dots"><div class="code-dot dot-r"></div><div class="code-dot dot-y"></div><div class="code-dot dot-g"></div></div></div>
+        <pre><code><span class="var">LeftBox</span><span class="punct">:</span><span class="fn">AddToggle</span><span class="punct">(</span><span class="str">'ESPEnabled'</span><span class="punct">,</span> <span class="punct">{</span> <span class="var">Text</span> <span class="punct">=</span> <span class="str">'ESP'</span><span class="punct">,</span> <span class="var">Default</span> <span class="punct">=</span> <span class="kw">true</span> <span class="punct">})</span>
+    <span class="punct">:</span><span class="fn">AddColorPicker</span><span class="punct">(</span><span class="str">'ESPColor'</span><span class="punct">,</span> <span class="punct">{</span>
+        <span class="var">Title</span>        <span class="punct">=</span> <span class="str">'ESP Color'</span><span class="punct">,</span>
+        <span class="var">Default</span>      <span class="punct">=</span> <span class="fn">Color3</span><span class="punct">.</span><span class="fn">fromRGB</span><span class="punct">(</span><span class="num">255</span><span class="punct">,</span> <span class="num">100</span><span class="punct">,</span> <span class="num">100</span><span class="punct">),</span>
+        <span class="var">Transparency</span> <span class="punct">=</span> <span class="num">0</span><span class="punct">,</span>  <span class="cmt">-- enable transparency slider when set</span>
+        <span class="var">Callback</span>     <span class="punct">=</span> <span class="kw">function</span><span class="punct">(</span><span class="var">Color</span><span class="punct">)</span>
+            <span class="fn">print</span><span class="punct">(</span><span class="str">'Color:'</span><span class="punct">,</span> <span class="var">Color</span><span class="punct">)</span>
+        <span class="kw">end</span>
+    <span class="punct">})</span>
+
+<span class="cmt">-- Programmatic access</span>
+<span class="var">Options</span><span class="punct">.</span><span class="var">ESPColor</span><span class="punct">:</span><span class="fn">SetValueRGB</span><span class="punct">(</span><span class="fn">Color3</span><span class="punct">.</span><span class="fn">fromRGB</span><span class="punct">(</span><span class="num">0</span><span class="punct">,</span> <span class="num">255</span><span class="punct">,</span> <span class="num">0</span><span class="punct">))</span>
+<span class="var">Options</span><span class="punct">.</span><span class="var">ESPColor</span><span class="punct">:</span><span class="fn">SetValue</span><span class="punct">({ </span><span class="var">Hue</span><span class="punct">,</span> <span class="var">Sat</span><span class="punct">,</span> <span class="var">Vib</span> <span class="punct">},</span> <span class="var">Transparency</span><span class="punct">)</span>
+<span class="fn">print</span><span class="punct">(</span><span class="var">Options</span><span class="punct">.</span><span class="var">ESPColor</span><span class="punct">.</span><span class="var">Value</span><span class="punct">)</span>  <span class="cmt">-- Color3</span>
+
+<span class="var">Options</span><span class="punct">.</span><span class="var">ESPColor</span><span class="punct">:</span><span class="fn">OnChanged</span><span class="punct">(</span><span class="kw">function</span><span class="punct">(</span><span class="var">Color</span><span class="punct">)</span>
+    <span class="fn">print</span><span class="punct">(</span><span class="str">'New color:'</span><span class="punct">,</span> <span class="var">Color</span><span class="punct">)</span>
+<span class="kw">end</span><span class="punct">)</span></code></pre>
+      </div>
+
+      <table class="param-table">
+        <thead><tr><th>Property</th><th>Type</th><th>Required</th><th>Description</th></tr></thead>
+        <tbody>
+          <tr><td>Default</td><td>Color3</td><td><span class="req-tag req">req</span></td><td>Initial color value.</td></tr>
+          <tr><td>Title</td><td>string</td><td><span class="req-tag opt">opt</span></td><td>Title shown inside the picker popup.</td></tr>
+          <tr><td>Transparency</td><td>number</td><td><span class="req-tag opt">opt</span></td><td>Set to any value to show a transparency slider (0 = fully opaque).</td></tr>
+          <tr><td>Callback</td><td>function(Color3)</td><td><span class="req-tag opt">opt</span></td><td>Fires whenever the color changes.</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- KEY PICKER -->
+    <section id="key-picker">
+      <div class="section-label">Addon</div>
+      <h2><span class="h2-icon">⌨️</span> Key Picker</h2>
+      <p>Attaches a keybind button to a Toggle or Label. Left-click to rebind; right-click to change mode. Appears in the Keybind HUD automatically.</p>
+
+      <div class="code-block">
+        <div class="code-header"><span class="code-lang">Lua</span><div class="code-dots"><div class="code-dot dot-r"></div><div class="code-dot dot-y"></div><div class="code-dot dot-g"></div></div></div>
+        <pre><code><span class="var">Toggles</span><span class="punct">.</span><span class="var">AutoFarm</span><span class="punct">:</span><span class="fn">AddKeyPicker</span><span class="punct">(</span><span class="str">'AutoFarmKey'</span><span class="punct">,</span> <span class="punct">{</span>
+    <span class="var">Default</span>          <span class="punct">=</span> <span class="str">'F'</span><span class="punct">,</span>
+    <span class="var">Text</span>             <span class="punct">=</span> <span class="str">'Auto Farm'</span><span class="punct">,</span>
+    <span class="var">Mode</span>             <span class="punct">=</span> <span class="str">'Toggle'</span><span class="punct">,</span>  <span class="cmt">-- 'Always' | 'Toggle' | 'Hold'</span>
+    <span class="var">Modes</span>            <span class="punct">=</span> <span class="punct">{</span> <span class="str">'Toggle'</span><span class="punct">,</span> <span class="str">'Hold'</span> <span class="punct">},</span>  <span class="cmt">-- visible modes</span>
+    <span class="var">SyncToggleState</span>  <span class="punct">=</span> <span class="kw">true</span><span class="punct">,</span>   <span class="cmt">-- keep parent toggle in sync</span>
+    <span class="var">NoUI</span>             <span class="punct">=</span> <span class="kw">false</span><span class="punct">,</span>  <span class="cmt">-- hide from Keybind HUD</span>
+    <span class="var">Callback</span>         <span class="punct">=</span> <span class="kw">function</span><span class="punct">(</span><span class="var">State</span><span class="punct">)</span>
+        <span class="fn">print</span><span class="punct">(</span><span class="str">'Keybind state:'</span><span class="punct">,</span> <span class="var">State</span><span class="punct">)</span>
+    <span class="kw">end</span><span class="punct">,</span>
+    <span class="var">ChangedCallback</span> <span class="punct">=</span> <span class="kw">function</span><span class="punct">(</span><span class="var">NewKey</span><span class="punct">)</span>
+        <span class="fn">print</span><span class="punct">(</span><span class="str">'Rebound to:'</span><span class="punct">,</span> <span class="var">NewKey</span><span class="punct">)</span>
+    <span class="kw">end</span>
+<span class="punct">})</span>
+
+<span class="cmt">-- Read state</span>
+<span class="kw">if</span> <span class="var">Options</span><span class="punct">.</span><span class="var">AutoFarmKey</span><span class="punct">:</span><span class="fn">GetState</span><span class="punct">()</span> <span class="kw">then</span>
+    <span class="cmt">-- key is active</span>
+<span class="kw">end</span>
+
+<span class="cmt">-- Set key + mode programmatically</span>
+<span class="var">Options</span><span class="punct">.</span><span class="var">AutoFarmKey</span><span class="punct">:</span><span class="fn">SetValue</span><span class="punct">({ </span><span class="str">'G'</span><span class="punct">,</span> <span class="str">'Hold'</span> <span class="punct">})</span></code></pre>
+      </div>
+
+      <table class="param-table">
+        <thead><tr><th>Property</th><th>Type</th><th>Required</th><th>Description</th></tr></thead>
+        <tbody>
+          <tr><td>Default</td><td>string</td><td><span class="req-tag req">req</span></td><td>Initial key name (e.g. <code>'F'</code>, <code>'MB1'</code>, <code>'None'</code>).</td></tr>
+          <tr><td>Text</td><td>string</td><td><span class="req-tag opt">opt</span></td><td>Label shown in the Keybind HUD.</td></tr>
+          <tr><td>Mode</td><td>string</td><td><span class="req-tag opt">opt</span></td><td>Initial mode: <code>'Always'</code>, <code>'Toggle'</code>, or <code>'Hold'</code>. Default: <code>'Toggle'</code>.</td></tr>
+          <tr><td>Modes</td><td>table</td><td><span class="req-tag opt">opt</span></td><td>Which mode buttons appear in the right-click menu. Default: all three.</td></tr>
+          <tr><td>SyncToggleState</td><td>boolean</td><td><span class="req-tag opt">opt</span></td><td>Automatically sync the parent Toggle's value with this keybind.</td></tr>
+          <tr><td>NoUI</td><td>boolean</td><td><span class="req-tag opt">opt</span></td><td>If true, this keybind will not appear in the Keybind HUD.</td></tr>
+          <tr><td>Callback</td><td>function(bool)</td><td><span class="req-tag opt">opt</span></td><td>Fires when toggled or pressed.</td></tr>
+          <tr><td>ChangedCallback</td><td>function(KeyCode)</td><td><span class="req-tag opt">opt</span></td><td>Fires when the user rebinds the key.</td></tr>
+        </tbody>
+      </table>
+
+      <h3>Mouse Buttons</h3>
+      <p>Use <code>'MB1'</code> for left mouse button and <code>'MB2'</code> for right mouse button as the key value.</p>
+    </section>
+
+    <hr>
+
+    <!-- THEMING -->
+    <section id="theming">
+      <div class="section-label">Customization</div>
+      <h2><span class="h2-icon">🎨</span> Theming</h2>
+      <p>All colors are stored on the <code>Library</code> table and can be changed at any time. Call <code>Library:UpdateColorsUsingRegistry()</code> after making changes to apply them to all existing elements.</p>
+
+      <div class="code-block">
+        <div class="code-header"><span class="code-lang">Lua</span><div class="code-dots"><div class="code-dot dot-r"></div><div class="code-dot dot-y"></div><div class="code-dot dot-g"></div></div></div>
+        <pre><code><span class="cmt">-- Default color values</span>
+<span class="var">Library</span><span class="punct">.</span><span class="var">FontColor</span>       <span class="punct">=</span> <span class="fn">Color3</span><span class="punct">.</span><span class="fn">fromRGB</span><span class="punct">(</span><span class="num">255</span><span class="punct">,</span> <span class="num">255</span><span class="punct">,</span> <span class="num">255</span><span class="punct">)</span>
+<span class="var">Library</span><span class="punct">.</span><span class="var">MainColor</span>       <span class="punct">=</span> <span class="fn">Color3</span><span class="punct">.</span><span class="fn">fromRGB</span><span class="punct">(</span><span class="num">28</span><span class="punct">,</span>  <span class="num">28</span><span class="punct">,</span>  <span class="num">28</span><span class="punct">)</span>
+<span class="var">Library</span><span class="punct">.</span><span class="var">BackgroundColor</span>  <span class="punct">=</span> <span class="fn">Color3</span><span class="punct">.</span><span class="fn">fromRGB</span><span class="punct">(</span><span class="num">40</span><span class="punct">,</span>  <span class="num">40</span><span class="punct">,</span>  <span class="num">40</span><span class="punct">)</span>
+<span class="var">Library</span><span class="punct">.</span><span class="var">BackgroundColor2</span> <span class="punct">=</span> <span class="fn">Color3</span><span class="punct">.</span><span class="fn">fromRGB</span><span class="punct">(</span><span class="num">30</span><span class="punct">,</span>  <span class="num">30</span><span class="punct">,</span>  <span class="num">30</span><span class="punct">)</span>
+<span class="var">Library</span><span class="punct">.</span><span class="var">AccentColor</span>      <span class="punct">=</span> <span class="fn">Color3</span><span class="punct">.</span><span class="fn">fromRGB</span><span class="punct">(</span><span class="num">255</span><span class="punct">,</span> <span class="num">0</span><span class="punct">,</span>   <span class="num">0</span><span class="punct">)</span>  <span class="cmt">-- highlights, active states</span>
+<span class="var">Library</span><span class="punct">.</span><span class="var">OutlineColor</span>     <span class="punct">=</span> <span class="fn">Color3</span><span class="punct">.</span><span class="fn">fromRGB</span><span class="punct">(</span><span class="num">59</span><span class="punct">,</span>  <span class="num">59</span><span class="punct">,</span>  <span class="num">59</span><span class="punct">)</span>
+<span class="var">Library</span><span class="punct">.</span><span class="var">GroupboxColor</span>    <span class="punct">=</span> <span class="fn">Color3</span><span class="punct">.</span><span class="fn">fromRGB</span><span class="punct">(</span><span class="num">35</span><span class="punct">,</span>  <span class="num">35</span><span class="punct">,</span>  <span class="num">35</span><span class="punct">)</span>
+<span class="var">Library</span><span class="punct">.</span><span class="var">TabActiveColor</span>   <span class="punct">=</span> <span class="fn">Color3</span><span class="punct">.</span><span class="fn">fromRGB</span><span class="punct">(</span><span class="num">50</span><span class="punct">,</span>  <span class="num">50</span><span class="punct">,</span>  <span class="num">50</span><span class="punct">)</span>
+<span class="var">Library</span><span class="punct">.</span><span class="var">RiskColor</span>        <span class="punct">=</span> <span class="fn">Color3</span><span class="punct">.</span><span class="fn">fromRGB</span><span class="punct">(</span><span class="num">255</span><span class="punct">,</span> <span class="num">50</span><span class="punct">,</span>  <span class="num">50</span><span class="punct">)</span>
+
+<span class="cmt">-- Change accent to blue</span>
+<span class="var">Library</span><span class="punct">.</span><span class="var">AccentColor</span>     <span class="punct">=</span> <span class="fn">Color3</span><span class="punct">.</span><span class="fn">fromRGB</span><span class="punct">(</span><span class="num">0</span><span class="punct">,</span> <span class="num">120</span><span class="punct">,</span> <span class="num">255</span><span class="punct">)</span>
+<span class="var">Library</span><span class="punct">.</span><span class="var">AccentColorDark</span> <span class="punct">=</span> <span class="var">Library</span><span class="punct">:</span><span class="fn">GetDarkerColor</span><span class="punct">(</span><span class="var">Library</span><span class="punct">.</span><span class="var">AccentColor</span><span class="punct">)</span>
+<span class="var">Library</span><span class="punct">:</span><span class="fn">UpdateColorsUsingRegistry</span><span class="punct">()</span>  <span class="cmt">-- apply everywhere</span>
+
+<span class="cmt">-- Rainbow accent (auto-updates every frame)</span>
+<span class="cmt">-- Library.CurrentRainbowColor is updated automatically</span>
+<span class="cmt">-- hook it via RunService if you want rainbow accent:</span>
+<span class="fn">game</span><span class="punct">:</span><span class="fn">GetService</span><span class="punct">(</span><span class="str">'RunService'</span><span class="punct">).</span><span class="var">RenderStepped</span><span class="punct">:</span><span class="fn">Connect</span><span class="punct">(</span><span class="kw">function</span><span class="punct">()</span>
+    <span class="var">Library</span><span class="punct">.</span><span class="var">AccentColor</span>     <span class="punct">=</span> <span class="var">Library</span><span class="punct">.</span><span class="var">CurrentRainbowColor</span>
+    <span class="var">Library</span><span class="punct">.</span><span class="var">AccentColorDark</span> <span class="punct">=</span> <span class="var">Library</span><span class="punct">:</span><span class="fn">GetDarkerColor</span><span class="punct">(</span><span class="var">Library</span><span class="punct">.</span><span class="var">AccentColor</span><span class="punct">)</span>
+    <span class="var">Library</span><span class="punct">:</span><span class="fn">UpdateColorsUsingRegistry</span><span class="punct">()</span>
+<span class="kw">end</span><span class="punct">)</span></code></pre>
+      </div>
+    </section>
+
+    <!-- WATERMARK -->
+    <section id="watermark">
+      <div class="section-label">Global UI</div>
+      <h2><span class="h2-icon">💧</span> Watermark</h2>
+      <p>A small draggable label shown in the top-left corner of the screen, useful for displaying script name or status.</p>
+
+      <div class="code-block">
+        <div class="code-header"><span class="code-lang">Lua</span><div class="code-dots"><div class="code-dot dot-r"></div><div class="code-dot dot-y"></div><div class="code-dot dot-g"></div></div></div>
+        <pre><code><span class="var">Library</span><span class="punct">:</span><span class="fn">SetWatermark</span><span class="punct">(</span><span class="str">'MyScript v1.2 | ' </span><span class="punct">..</span> <span class="var">game</span><span class="punct">.</span><span class="var">Players</span><span class="punct">.</span><span class="var">LocalPlayer</span><span class="punct">.</span><span class="var">Name</span><span class="punct">)</span>
+<span class="var">Library</span><span class="punct">:</span><span class="fn">SetWatermarkVisibility</span><span class="punct">(</span><span class="kw">true</span><span class="punct">)</span>   <span class="cmt">-- show</span>
+<span class="var">Library</span><span class="punct">:</span><span class="fn">SetWatermarkVisibility</span><span class="punct">(</span><span class="kw">false</span><span class="punct">)</span>  <span class="cmt">-- hide</span></code></pre>
+      </div>
+    </section>
+
+    <!-- NOTIFICATIONS -->
+    <section id="notifications">
+      <div class="section-label">Global UI</div>
+      <h2><span class="h2-icon">🔔</span> Notifications</h2>
+      <p>Toast-style animated notifications that appear in the top-left and auto-dismiss after a timer.</p>
+
+      <div class="code-block">
+        <div class="code-header"><span class="code-lang">Lua</span><div class="code-dots"><div class="code-dot dot-r"></div><div class="code-dot dot-y"></div><div class="code-dot dot-g"></div></div></div>
+        <pre><code><span class="var">Library</span><span class="punct">:</span><span class="fn">Notify</span><span class="punct">(</span><span class="str">'Settings saved!'</span><span class="punct">)</span>          <span class="cmt">-- default 5s</span>
+<span class="var">Library</span><span class="punct">:</span><span class="fn">Notify</span><span class="punct">(</span><span class="str">'Quick message'</span><span class="punct">,</span> <span class="num">2</span><span class="punct">)</span>          <span class="cmt">-- 2s</span>
+<span class="var">Library</span><span class="punct">:</span><span class="fn">Notify</span><span class="punct">(</span><span class="str">'Error: something went wrong'</span><span class="punct">,</span> <span class="num">8</span><span class="punct">)</span>  <span class="cmt">-- 8s</span></code></pre>
+      </div>
+
+      <table class="param-table">
+        <thead><tr><th>Parameter</th><th>Type</th><th>Description</th></tr></thead>
+        <tbody>
+          <tr><td>Text</td><td>string</td><td>The message to display.</td></tr>
+          <tr><td>Time</td><td>number</td><td>Duration in seconds before the notification fades out. Default: 5.</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- KEYBIND HUD -->
+    <section id="keybinds">
+      <div class="section-label">Global UI</div>
+      <h2><span class="h2-icon">🎹</span> Keybind HUD</h2>
+      <p>A draggable HUD panel that automatically lists all registered Key Pickers and their current state. Shown/hidden separately from the main window.</p>
+
+      <div class="code-block">
+        <div class="code-header"><span class="code-lang">Lua</span><div class="code-dots"><div class="code-dot dot-r"></div><div class="code-dot dot-y"></div><div class="code-dot dot-g"></div></div></div>
+        <pre><code><span class="cmt">-- Show the keybind frame</span>
+<span class="var">Library</span><span class="punct">.</span><span class="var">KeybindFrame</span><span class="punct">.</span><span class="var">Visible</span> <span class="punct">=</span> <span class="kw">true</span>
+
+<span class="cmt">-- It auto-resizes as keybinds are added/removed</span></code></pre>
+      </div>
+    </section>
+
+    <!-- OPTIONS & TOGGLES -->
+    <section id="options">
+      <div class="section-label">Global State</div>
+      <h2><span class="h2-icon">🗃️</span> Toggles & Options</h2>
+      <p>All UI elements are registered in two global tables: <code>Toggles</code> for toggle components, and <code>Options</code> for everything else (sliders, dropdowns, inputs, color pickers, key pickers).</p>
+
+      <div class="code-block">
+        <div class="code-header"><span class="code-lang">Lua</span><div class="code-dots"><div class="code-dot dot-r"></div><div class="code-dot dot-y"></div><div class="code-dot dot-g"></div></div></div>
+        <pre><code><span class="cmt">-- Toggle</span>
+<span class="var">Toggles</span><span class="punct">.</span><span class="var">AutoFarm</span><span class="punct">.</span><span class="var">Value</span>           <span class="cmt">-- boolean</span>
+<span class="var">Toggles</span><span class="punct">.</span><span class="var">AutoFarm</span><span class="punct">:</span><span class="fn">SetValue</span><span class="punct">(</span><span class="kw">true</span><span class="punct">)</span>
+
+<span class="cmt">-- Slider</span>
+<span class="var">Options</span><span class="punct">.</span><span class="var">WalkSpeed</span><span class="punct">.</span><span class="var">Value</span>           <span class="cmt">-- number</span>
+<span class="var">Options</span><span class="punct">.</span><span class="var">WalkSpeed</span><span class="punct">:</span><span class="fn">SetValue</span><span class="punct">(</span><span class="num">100</span><span class="punct">)</span>
+
+<span class="cmt">-- Dropdown</span>
+<span class="var">Options</span><span class="punct">.</span><span class="var">WeaponType</span><span class="punct">.</span><span class="var">Value</span>          <span class="cmt">-- string (single) or {name=true} (multi)</span>
+<span class="var">Options</span><span class="punct">.</span><span class="var">WeaponType</span><span class="punct">:</span><span class="fn">SetValue</span><span class="punct">(</span><span class="str">'Bow'</span><span class="punct">)</span>
+
+<span class="cmt">-- Color picker</span>
+<span class="var">Options</span><span class="punct">.</span><span class="var">ESPColor</span><span class="punct">.</span><span class="var">Value</span>            <span class="cmt">-- Color3</span>
+<span class="var">Options</span><span class="punct">.</span><span class="var">ESPColor</span><span class="punct">.</span><span class="var">Transparency</span>    <span class="cmt">-- number 0–1</span>
+
+<span class="cmt">-- Key picker</span>
+<span class="var">Options</span><span class="punct">.</span><span class="var">AutoFarmKey</span><span class="punct">.</span><span class="var">Value</span>         <span class="cmt">-- string key name</span>
+<span class="var">Options</span><span class="punct">.</span><span class="var">AutoFarmKey</span><span class="punct">:</span><span class="fn">GetState</span><span class="punct">()</span>    <span class="cmt">-- boolean: currently active?</span></code></pre>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <span>Boron UI Library Documentation</span>
+  <span>Built from source analysis · 2024</span>
+</footer>
+
+<!-- NAV ACTIVE STATE SCRIPT -->
+<script>
+  const navItems = document.querySelectorAll('.nav-item');
+  const sections = document.querySelectorAll('section[id]');
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        navItems.forEach(item => item.classList.remove('active'));
+        const active = document.querySelector(`.nav-item[href="#${entry.target.id}"]`);
+        if (active) active.classList.add('active');
+      }
+    });
+  }, { rootMargin: '-20% 0px -70% 0px' });
+
+  sections.forEach(s => observer.observe(s));
+</script>
+</body>
+</html>
